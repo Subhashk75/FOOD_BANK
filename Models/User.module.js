@@ -1,15 +1,11 @@
 import mongoose from "mongoose"
 import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
 const userSchema = new mongoose.Schema(
     {
        fullName :{
         type:String,
         required: true,
         trim:true
-       },
-       image:{
-         type:String, //cloudinary se 
        },
        email:{
         type:String,
@@ -40,7 +36,9 @@ const userSchema = new mongoose.Schema(
        isCheck:{
          type:mongoose.Schema.Types.ObjectId,
          ref:"Holder"
-       }
+       },
+       holder: { type: mongoose.Schema.Types.ObjectId, ref: 'Holder' }, // Reference to Holder
+
       
     }
     ,{timestamps:true})
@@ -71,4 +69,6 @@ const userSchema = new mongoose.Schema(
     )
     }
 
-    export const User =mongoose.model("User" ,userSchema);
+const User =mongoose.model("User" ,userSchema);
+
+export default User
