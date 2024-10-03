@@ -1,7 +1,18 @@
 import express from "express";
 import { acceptForm } from "../Controllers/User.controllers.js";
-const router= express.Router();
+import { BlogPost } from "../Controllers/Blog.controllers.js";
+import { upload } from "../middleware/multer.middleware.js";
 
-router.post("/acceptForm" ,acceptForm);
+const router = express.Router();
+
+// Route to accept the form (for user or other purposes)
+router.post("/acceptForm", acceptForm);
+
+// Route to create a blog post with an image upload
+router.route("/blogs").post(
+  // This middleware will handle file uploads (image in this case)
+  upload.fields([{ name: "image", maxCount: 1 }])  ,
+  BlogPost // The handler for creating the blog post
+);
 
 export default router;
