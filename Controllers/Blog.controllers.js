@@ -50,4 +50,19 @@ const BlogPost = async (req, res, next) => {
   }
 };
 
-export { BlogPost };
+const blogData =async(req,res)=>{
+   try {
+    const BlogResponseData = await Blog.find({});
+     
+    res.status(200).json(BlogResponseData);
+   } catch (error) {
+    console.error('Error fetching data Blog :', error);
+    res.status(500).json({ error: 'Failed to fetch data Blog ' });
+   }
+
+}
+
+
+
+
+export { BlogPost ,blogData };

@@ -1,6 +1,6 @@
 import express from "express";
 import { acceptForm } from "../Controllers/User.controllers.js";
-import { BlogPost } from "../Controllers/Blog.controllers.js";
+import { blogData, BlogPost } from "../Controllers/Blog.controllers.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = express.Router();
@@ -15,4 +15,5 @@ router.route("/blogs").post(
   BlogPost // The handler for creating the blog post
 );
 
+router.route("/BlogData" ).get(blogData);
 export default router;

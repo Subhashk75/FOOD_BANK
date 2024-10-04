@@ -82,7 +82,7 @@ const sendMail=async(email,Postconfirm)=>{
           sendMail(email, Postconfirm);
           }
           // Respond to client
-          res.status(201).json({ message: "Account created", token: Postconfirm });
+          res.status(201).json({ message: "Account created", data:result});
           
       } catch (err) {
           console.log("Failed to create Post for stack Holder:", err);
@@ -90,4 +90,17 @@ const sendMail=async(email,Postconfirm)=>{
       }
   };
   
+  export const postResponse = async(req,res)=>{
+         
+    try {
+      // Fetch all documents in the collection
+      const data = await Holder.find({});
+      // Send the data as JSON response
+      res.status(200).json(data);
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      res.status(500).json({ error: 'Failed to fetch data' });
+  }
+
+  } 
  
