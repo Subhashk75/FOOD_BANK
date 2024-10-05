@@ -2,6 +2,9 @@ import User from "../Models/User.module.js";
 import nodeMailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import Holder from "../Models/StackHolder.module.js"; // Correct import
+import dotenv from "dotenv";
+
+dotenv.config(); // Load environment variables
 
 // Function to send email
 const sendMail = async (email, holderemail, Postconfirm) => {
@@ -9,8 +12,8 @@ const sendMail = async (email, holderemail, Postconfirm) => {
     let transportmail = nodeMailer.createTransport({
       service: "gmail",
       auth: {
-        user: "kumawatsubhash388@gmail.com",
-        pass: "joejkzhhckdphelr", // Store this in environment variables for security!
+         user: "kumawatsubhash388@gmail.com",
+         pass: "joejkzhhckdphelr",  // Use environment variable
       },
     });
 
@@ -34,9 +37,9 @@ const sendMail = async (email, holderemail, Postconfirm) => {
 };
 
 // Function to retrieve email from Holder schema
-async function getEmailFromPostId(id) {
+async function getEmailFromPostId(randomString) {
   try {
-    const post = await Holder.findById(id).populate('user', 'email'); // Assumes Holder has a reference to a 'user' model
+    const post = await Holder.findOne({ randomString }).populate('user', 'email'); // Use findOne instead of find for a single result
     if (post && post.user) {
       console.log(`User email: ${post.user.email}`);
       return post.user.email; // Return the email
@@ -52,47 +55,51 @@ async function getEmailFromPostId(id) {
 
 // Create post function
 export const acceptForm = async (req, res) => {
-  const { fullName, personcount, email, phoneNo, district, address, pincode } = req.body;
+  const { fullName, personcount, email, phoneNo, district, address, pincode, randomString } = req.body;
 
   try {
     // Basic validation
-    if (!fullName || !personcount  || !phoneNo || !district || !address || !pincode) {
+    if (!fullName || !personcount || !phoneNo || !district || !address || !pincode || !email) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Check if email already exists
+    const findEmail = await User.findOne({ email });
+    if (findEmail) {
+      return res.status(409).json({ message: "Email already exists", findEmail });
+    }
+
+    // Get holder email from the random string
+    // const holderemail = await getEmailFromPostId(randomString);
+
     // Insert data into the database
-    const result = await User.insertMany({
+    const result = await User.create({
       fullName,
       email,
       phoneNo,
       personcount,
-    //   id: Holder._id, // Assuming this is correct, if not replace with relevant field
       district,
       address,
       pincode,
     });
 
-    console.log("Mongoose DB create");
+    console.log("User successfully created in MongoDB");
 
     // Create JWT
     const Postconfirm = jwt.sign(
       {
-        _id: result[0]._id, // Using the first document's ID
-        email: result[0].email,
+        _id: result._id,
+        email: result.email,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-      }
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     );
 
-    // Get the email of the holder by ID
-    // const holderemail = await getEmailFromPostId(id);
-
-    // // Send confirmation email if holder email exists
-    // if (holderemail) {
-    //   sendMail(email, holderemail, Postconfirm);
-    // }
+    // Send confirmation email if holder email exists
+    if (holderemail) {
+      sendMail(email, holderemail, Postconfirm);
+      
+    }
 
     // Respond to the client
     res.status(201).json({ message: "Account created", token: Postconfirm });
@@ -101,3 +108,5 @@ export const acceptForm = async (req, res) => {
     res.status(500).json({ message: "Failed to create post", error: err.message });
   }
 };
+
+// Store this in environment variables for security!

@@ -40,11 +40,8 @@ const sendMail=async(email,Postconfirm)=>{
      
       try {
           // Basic validation
-          const holder = await Holder.findById(id);
-          if (!holder) {
-            
-          }
-
+         
+           const randomString = generateRandomString(7);
 
           if (!foodName || !mealType || !category || !quantity || !phoneNo || !district || !address || !pincode) {
               return res.status(400).json({ message: "All fields are required" });
@@ -53,6 +50,7 @@ const sendMail=async(email,Postconfirm)=>{
           // Insert data into the database
           const result = await Holder.insertMany({
               foodName,
+              randomString:randomString,
               email,
               phoneNo,
               mealType,
@@ -78,9 +76,9 @@ const sendMail=async(email,Postconfirm)=>{
           );
   
           // Send confirmation email
-          if(email){
-          sendMail(email, Postconfirm);
-          }
+          // if(email){
+          // sendMail(email, Postconfirm);
+          // }
           // Respond to client
           res.status(201).json({ message: "Account created", data:result});
           
@@ -103,4 +101,18 @@ const sendMail=async(email,Postconfirm)=>{
   }
 
   } 
+
+// random string function
+  function generateRandomString(length = 7) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    
+    return result;
+}
+
+
  

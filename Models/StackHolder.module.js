@@ -43,13 +43,22 @@ const holderSchema = new mongoose.Schema(
         type:Number,
         required:true
       },
+      randomString:{
+           type:String,
+           required:true
+      },
       isconfirm:{
         type:Boolean
       },
       isCheck:{
         type:Boolean,
         default:false
-      }
+      },
+      // user: {
+      //   type: mongoose.Schema.Types.ObjectId,
+      //   ref: 'User', // Reference to the User model
+      //   required: true, // This can be optional depending on your use case
+      // }
 
     },
     {timestamps:true})
