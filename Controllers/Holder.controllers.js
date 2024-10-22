@@ -92,9 +92,21 @@ const sendMail=async(email,Postconfirm)=>{
          
     try {
       // Fetch all documents in the collection
-      const data = await Holder.find({});
-      // Send the data as JSON response
-      res.status(200).json(data);
+      const postResponseData = await Holder.find({});
+
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 4); // 4 days from now
+  
+      // Serialize the array of blog posts to JSON
+      const serializedBlogs = JSON.stringify(postResponseData);
+  
+      // Set cookie with serialized blogs
+      res.cookie('postData', encodeURIComponent(serializedBlogs), {
+        maxAge: 24 * 60 * 60 * 1000 * 4, // 4 days in milliseconds
+        httpOnly: false
+      });
+  
+      res.status(200).json(postResponseData);
   } catch (error) {
       console.error('Error fetching data:', error);
       res.status(500).json({ error: 'Failed to fetch data' });

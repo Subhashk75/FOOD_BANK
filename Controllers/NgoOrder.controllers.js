@@ -1,4 +1,4 @@
-import User from "../Models/User.module.js";
+import Order from "../Models/NgoOrder.module.js";
 import nodeMailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import Holder from "../Models/StackHolder.module.js"; // Correct import
@@ -64,7 +64,7 @@ export const acceptForm = async (req, res) => {
     }
 
     // Check if email already exists
-    const findEmail = await User.findOne({ email });
+    const findEmail = await Order.findOne({ email });
     if (findEmail) {
       return res.status(409).json({ message: "Email already exists", findEmail });
     }
@@ -73,7 +73,7 @@ export const acceptForm = async (req, res) => {
     // const holderemail = await getEmailFromPostId(randomString);
 
     // Insert data into the database
-    const result = await User.create({
+    const result = await Order.create({
       fullName,
       email,
       phoneNo,
