@@ -19,7 +19,9 @@
     "nodemon": "^3.1.7"
   },
   "scripts": {
-    "dev": "nodemon -r dotenv/config --experimental-json-modules index.js"
+    "dev": "nodemon -r dotenv/config --experimental-json-modules backend/index.js",
+    "build":"npm install && npm install --prefix Food_bank && npm run build --prefix Food_bank ",
+     "start": "nodemon backend/index.js"
   },
   "author": "",
   "license": "ISC",
