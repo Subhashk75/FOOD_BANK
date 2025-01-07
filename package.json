@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "nodemon -r dotenv/config --experimental-json-modules backend/index.js",
-    "build":"npm install && npm install --prefix Food_bank && npm run build --prefix Food_bank ",
+    "build":"npm install && npm install --prefix Food_bank && npm run build --prefix Food_bank "
 
   },
   "author": "",
