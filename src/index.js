@@ -18,7 +18,27 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['https://food-bank-git-main-something1.vercel.app/'], // Replace with your Vercel frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }));
+
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'https://food-bank-git-main-something1.vercel.app'
+];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
+
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ limit: "26kb", extended: true }));
