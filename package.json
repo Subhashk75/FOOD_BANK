@@ -13,14 +13,14 @@
   },
   "name": "backend",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "index.js",
   "type": "module",
   "devDependencies": {
     "nodemon": "^3.1.7"
   },
   "scripts": {
-    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
-    "start": "node src/index.js"
+    "dev": "nodemon -r dotenv/config --experimental-json-modules index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
