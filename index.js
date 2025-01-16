@@ -19,7 +19,7 @@ connectDB();
 app.use(cors());
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow only this origin
+    origin: 'https://food-bank-api.vercel.app/', // Allow only this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   }));
