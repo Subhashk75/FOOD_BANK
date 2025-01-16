@@ -16,28 +16,14 @@ const app = express();
 
 // Connect to MongoDB
 connectDB();
-
+app.use(cors());
 // Middleware
 app.use(cors({
-    origin: ['https://food-bank-git-main-something1.vercel.app/'], // Replace with your Vercel frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: 'http://localhost:5173', // Allow only this origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   }));
-
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'https://food-bank-git-main-something1.vercel.app'
-];
-
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
-}));
+  
 
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
